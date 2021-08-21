@@ -2,7 +2,7 @@
 --				EMA - ( Ebony's MultiBoxing Assistant )    							--
 --				Current Author: Jennifer Cally (Ebony)								--
 --																					--
---				License: All Rights Reserved 2018-2020 Jennifer Cally					--
+--				License: All Rights Reserved 2018-2021 Jennifer Calladine					--
 --																					--
 --				Some Code Used from "Jamba" that is 								--
 --				Released under the MIT License 										--
@@ -27,6 +27,7 @@ L[" / "] = true
 L["/"] = true
 L["%"] = true
 L["N/A"] = true
+L["WIP"] = "wip"
 L["OPEN_CONFIG"] = "Opens The Config"
 L["OPEN_CONFIG_HELP"] = "Opens The Configuration GUI"
 L["PUSH_SETTINGS"] = "Push Settings"
@@ -152,7 +153,7 @@ L["RESETTING_PROFILE"] = "Resetting profile: "
 L["PROFILE_DELETED"] = "Profile deleted - iterating all modules."
 L["DELETING_PROFILE"] = "Deleting profile: "
 L["Failed_LOAD_MODULE"] =  "Failed to load EMA Module: "
-L["TEXT1"] = "Ebony's MultiBoxing Assistant v3.0 For 9.0.1!" 
+L["TEXT1"] = "Ebony's MultiBoxing Assistant v3.0 For 9.0.2!" 
 L["TEXT2"] = ""
 L["TEXT3"] = "Welcome To v3.0!"
 L["TEXT4"] = ""
@@ -174,7 +175,7 @@ L["ISB"] = ""
 L["TEMP_WEBSITE1"] = ""
 L["TEMP_WEBSITE2"] = ""
 L["TEMP_WEBSITE3"] = ""
-L["COPYRIGHT"] = "Copyright (c) 2015-2020  Jennifer Calladine (Ebony)"
+L["COPYRIGHT"] = "Copyright (c) 2015-2021  Jennifer Calladine (Ebony)"
 L["COPYRIGHTTWO"] = "Released Under License: All Rights Reserved unless otherwise explicitly stated"
 L["FRAME_RESET"] = "Frame Reset"
 -- Msg 8000
@@ -274,6 +275,16 @@ L["FAKE_KEY_BINDING"] = "* Needs to Press the key on all clones"
 L["BINDING_CLICK_TO_MOVE"] = "Toggle Click To Move"
 L["COMMANDLINE_CLICK_TO_MOVE"] = "Toggles Click To Move <Group> "
 L["COMMANDLINE_CLICK_TO_MOVE_HELP"] = "Toggles Click To Move By <Group>"
+L["SET_FOCUS_ONE"] = "Sets Focus To Order One"
+L["SET_FOCUS_TWO"] = "Sets Focus To Order Two"
+L["SET_FOCUS_THREE"] = "Sets Focus To Order Three"
+L["SET_FOCUS_FOUR"] = "Sets Focus To Order Four"
+L["SET_FOCUS_FIVE"] = "Sets Focus To Order Five"
+L["SET_FOCUS_SIX"] = "Sets Focus To Order Six"
+L["SET_FOCUS_SEVEN"] = "Sets Focus To Order Seven"
+L["SET_FOCUS_EIGHT"] = "Sets Focus To Order Eight"
+L["SET_FOCUS_NINE"] = "Sets Focus To Order Nine"
+L["SET_FOCUS_TEN"] = "Sets Focus To Order Ten"
 
 --------------------------
 -- Message Locale
@@ -431,6 +442,8 @@ L["ONLY_DISMOUNT_WITH_MASTER_HELP"] = "Only Dismount's When Master Character Dis
 L["ONLY_MOUNT_WHEN_IN_RANGE"] = "Only Mount When In Range"
 L["ONLY_MOUNT_WHEN_IN_RANGE_HELP"] = "Dismounts Only When The Team Is In Range /nOnly Works In A Party!"
 L["I_AM_UNABLE_TO_MOUNT"] = "I Am Unable To Mount."
+L["MOUNT_HELP"] = "Command Teams To Summon A Random Favorite Mount"
+
 -- Loot Locale
 L["LOOT_OPTIONS"] = "Loot v2 Options"
 L["DISMOUNT_WITH_CHARACTER"] = "Dismount With Character That Dismount"
@@ -624,9 +637,12 @@ L["ANY_MEMBER_IN_COMBAT"] = "Any Member In Combat"
 L["FOLLOW_STROBING"] = "Follow Strobing"
 L["FOLLOW_STROBING_EMA_FOLLOW_COMMANDS."] = "Follow Strobing Is Controlled By \"/ema Commands\" Or KeyBindings"
 L["USE_MASTER_STROBE_TARGET"] = "Always Use Master As The Strobe Target"
+--
 L["PAUSE_FOLLOW_STROBING"] = "Pause Follow Strobing If ...."
 L["DRINKING_EATING"] = "Drinking/Eating"
 L["IN_A_VEHICLE"] = "In A Vehicle"
+L["PLAYER_DEAD"] = "Dead Or Ghost"
+--
 L["GROUP_FOLLOW_STROBE"] = "Group For Follow Strobe"
 L["FREQUENCY"] = "Frequency (s)"
 L["FREQUENCY_COMABT"] = "Frequency In Combat (s)"
@@ -748,6 +764,14 @@ L["RELEASE_TEAM_Q"] = "Release All Team?"
 L["RELEASE_TEAM"] = "Release Team"
 L["RECOVER_CORPSES"] = "Recover All Team Corpses?"
 L["ERR_GOLD_TO_REPAIR"] = "I Do Not Have Enough Money To Repair All My Items"
+--Set View
+L["SET_VIEW_HEADER"] = "Set View Settings" 
+L["SET_VIEW"] = "Set View" 
+L["SET_VIEW_HELP"] = "Set View Team View" 
+L["SET_VIEW_WITHOUT_MASTER"] = "Set View Without Master"
+L["SET_VIEW_WITHOUT_MASTER_HELP"] = "Set View Without The Master"
+
+
 L["RELEASE_CORPSE_FOR_X"] = function( delay )
 	return string.format( "I can not release to my Corpse for: %s seconds", delay )
 end

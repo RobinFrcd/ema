@@ -1,6 +1,160 @@
 ﻿---------------------------
 ChangeLogs:
 ---------------------------
+EMA Version: v9.0.5-Release-v3.1(0189)
+Game Version: 9.0.5
+Release Date: 11/03/2021
+---------------------------
+
+## Quest-Watcher 
+	-- fixed the watcher Alpha
+
+
+
+---------------------------
+EMA Version: v9.0.5-Release-v3.1(0188)
+Game Version: 9.0.5
+Release Date: 11/03/2021
+---------------------------
+
+*.TOC Bump 
+
+
+
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0187)
+Game Version: 9.0.2
+Release Date: 27/02/2021
+
+##Core
+
+-- Esc key close the config screen, issue/pull #31 #43
+
+## Quest Wacher
+	-- case sensitive error  in scenarios and torghast part of the addon. ( pull request #34 )
+
+## Quest
+	-- Fix #21	
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0186)
+Game Version: 9.0.2
+Release Date: 27/02/2021
+
+## Vender/Sell
+	-- Removed Destroying Of Items Due To Api Changes.
+
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0185)
+Game Version: 9.0.2
+Release Date: 26/02/2021
+
+
+## Interaction
+	-- Fixed the Dismounting options issue #35
+		-- Works with the keybindings as well. (Team not the master one)
+
+## Mail
+	-- Fixed Issue #41 Where gold would still send if shift key was held down.
+
+## follow
+	-- Added Request #45
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0184)
+Game Version: 9.0.2
+Release Date: 04/12/2020
+
+## KeyBinding
+	-- Added a keybinding for "SetView"
+
+# Display-Team
+	-- Removed Artifact Power xp Bar ( if they add somthing like this it probs get all changed again )
+		- so changed to "Gold".
+	-- Added Gold to the Display Team	
+
+# Toon
+	-- Added A Setview Command With Or Without Team
+		- :) yes you olny have to press it on one toon 
+		
+		
+
+
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0183)
+Game Version: 9.0.2
+Release Date: 25/11/2020
+
+# Quest
+	-- Fixed A non-Api change on Shadowlands quest givers when handing in mutiple quests .
+	
+
+
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0182)
+Game Version: 9.0.2
+Release Date: 22/11/2020
+
+## Team 
+	-- Added New Set Focus KeyBindings to set the team members in the order they sit in the GUI
+
+## /Click macros
+	-- Made some easyer to work with see doc at:
+		https://github.com/ebonyfaye/ema/wiki/Click-Macros
+
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0181)
+Game Version: 9.0.2
+Release Date: 20/11/2020
+
+## Interaction
+	--Undo the mount change in (0180)
+	-- New Mount Option
+		-New command: "/ema-interaction mount <Tag>" 
+		- New KeyBinding, now calls "/ema-interaction mount all"
+			- Will Now tell the team to summon a "Random Favorite Mount" (everyone summons there own random mount) 
+				-- Dev note: This works with with shift!!!!!!!.
+				-- You do not need to Have the settings ticked in the options to copy mount!	
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0180)
+Game Version: 9.0.2
+Release Date: 19/11/2020
+
+## Interaction
+	--Added a keybinding to mount from you "Summon Random Favorite Mount" ( you need mount team on for the team to copy ) request #20
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0179)
+Game Version: 9.0.2
+Release Date: 19/11/2020
+
+## Follow
+	SNW now works again (less follow borken spam!)
+	/ema-follow me and KeyBinding 
+		-- No Longer spams follow borken when you change Follow Target.
+		-- No Longer Trys to follow it self in "Vehicle" 
+
+
+
+---------------------------
+EMA Version: v9.0.2-Release-v3.1(0178)
+Game Version: 9.0.2
+Release Date: 18/11/2020
+
+## Core
+	-- Updated Ace3
+	-- Updated Ace3-SharedMediaWidgets
+
+## Information
+	--Fixed a lua error from changes with the new patch
+	
+---------------------------
 EMA Version: v9.0.1-Release-v3.1(0175)
 Game Version: 9.0.1
 Release Date: 13/11/2020

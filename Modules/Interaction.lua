@@ -37,6 +37,11 @@ EMA.moduleDisplayName = L["INTERACTION"]
 -- order
 EMA.moduleOrder = 60
 
+-- EMA key bindings.
+BINDING_HEADER_MOUNT = L["MOUNT"]
+BINDING_NAME_TEAMMOUNT = L["MOUNT_WITH_TEAM"]
+
+
 -- Settings - the values to store and their defaults for the settings database.
 EMA.settings = {
 	profile = {
@@ -76,6 +81,16 @@ function EMA:GetConfiguration()
 				get = false,
 				set = "",				
 			},
+			mount = {
+				type = "input",
+				name = L["MOUNT"],
+				desc = L["MOUNT_HELP"],
+				usage = "/ema-interaction mount <tag>",
+				get = false,
+				set = "RandomMountWithTeam",
+				order = 3,
+				guiHidden = true,
+			},			
 			push = {
 				type = "input",
 				name = L["PUSH_SETTINGS"],
@@ -99,6 +114,7 @@ EMA.COMMAND_TAKE_TAXI = "EMATaxiTakeTaxi"
 EMA.COMMAND_EXIT_TAXI = "EMATaxiExitTaxi"
 EMA.COMMAND_CLOSE_TAXI = "EMACloseTaxi"
 EMA.COMMAND_MOUNT_ME = "EMAMountMe"
+EMA.COMMAND_MOUNT_COMMAND = "EMAMountCommand"
 EMA.COMMAND_MOUNT_DISMOUNT = "EMAMountDisMount"
 
 -------------------------------------------------------------------------------------------------------------
@@ -122,15 +138,19 @@ function EMA:OnInitialize()
 	EMA.castingMount = nil
 	EMA.isMounted = nil
 	EMA.responding = false
-	--7.3.5 code Remove!
-	EMA.mountName = nil
 	-- Create the settings control.
 	EMA:SettingsCreate()
 	-- Initialse the EMAModule part of this module.
 	EMA:EMAModuleInitialize( EMA.settingsControl.widgetSettings.frame )
 	-- Populate the settings.
 	EMA:SettingsRefresh()
-	--EMA:DisableAutoLoot()	
+	--EMA:DisableAutoLoot()
+	if InCombatLockdown()  == false then
+		EMATeamSecureButtonMount = CreateFrame( "CheckButton", "EMATeamSecureButtonMount", nil, "SecureActionButtonTemplate" )
+		EMATeamSecureButtonMount:SetAttribute( "type", "macro" )
+		EMATeamSecureButtonMount:SetAttribute( "macrotext", "/ema-interaction mount all" )
+		EMATeamSecureButtonMount:Hide()
+	end
 end
 
 -- Called when the addon is enabled.
@@ -144,6 +164,10 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "LOOT_READY" )
 	EMA:RegisterEvent( "TAXIMAP_OPENED" )
 	EMA:RegisterEvent( "TAXIMAP_CLOSED" )
+	-- Initialise key bindings.
+	EMA.keyBindingFrame = CreateFrame( "Frame", nil, UIParent )
+	EMA:RegisterEvent( "UPDATE_BINDINGS" )		
+	EMA:UPDATE_BINDINGS()
 	EMA:RegisterMessage( EMAApi.MESSAGE_MESSAGE_AREAS_CHANGED, "OnMessageAreasChanged" )
 end
 
@@ -452,8 +476,8 @@ function EMA:SettingsRefresh()
 	EMA.settingsControl.checkBoxTellBoEEpic:SetValue( EMA.db.tellBoEEpic )
 	EMA.settingsControl.checkBoxTellBoEMount:SetValue( EMA.db.tellBoEMount )
 	-- Set state.
-	EMA.settingsControl.checkBoxDismountWithTeam:SetDisabled( not EMA.db.mountWithTeam )
-	EMA.settingsControl.checkBoxDismountWithMaster:SetDisabled( not EMA.db.dismountWithTeam or not EMA.db.mountWithTeam )
+	--EMA.settingsControl.checkBoxDismountWithTeam:SetDisabled( not EMA.db.mountWithTeam )
+	--EMA.settingsControl.checkBoxDismountWithMaster:SetDisabled( not EMA.db.dismountWithTeam or not EMA.db.mountWithTeam )
 	--EMA.settingsControl.checkBoxMountInRange:SetDisabled( not EMA.db.mountWithTeam )
 end
 
@@ -617,7 +641,7 @@ end
 
 
 function EMA:UNIT_SPELLCAST_SUCCEEDED(event, unitID, lineID, spellID, ... )
-	if EMA.db.mountWithTeam == false  or EMA.castingMount == nil or unitID ~= "player" then
+	if EMA.db.mountWithTeam == false  or EMA.castingMount == nil or unitID ~= "player" or EMA.CommandLineMount == true then
 		return
 	end
 	--EMA:Print("Looking for Spells Done", spellID, EMA.castingMount)
@@ -632,7 +656,7 @@ end
 
 function EMA:UNIT_AURA(event, unitID, ... )
 	--EMA:Print("tester", unitID, EMA.isMounted)
-	if unitID ~= "player" or EMA.isMounted == nil or EMA.db.dismountWithTeam == false then
+	if unitID ~= "player" or EMA.isMounted == nil then
         return
     end
 	--EMA:Print("auraTrack", unitID, EMA.isMounted, EMA.mountName )
@@ -641,15 +665,17 @@ function EMA:UNIT_AURA(event, unitID, ... )
 		if EMA.db.dismountWithMaster == true then
 			if EMAApi.IsCharacterTheMaster( EMA.characterName ) == true then
 				if IsShiftKeyDown() == false then	
-						--EMA:Print("test")
+					--EMA:Print("test")
 					EMA:EMASendCommandToTeam( EMA.COMMAND_MOUNT_DISMOUNT )
 					EMA:UnregisterEvent("UNIT_AURA")
 				end		
 			end
 		else
-			if IsShiftKeyDown() == false then	
-				EMA:EMASendCommandToTeam( EMA.COMMAND_MOUNT_DISMOUNT )
-				EMA:UnregisterEvent("UNIT_AURA")
+			if EMA.db.dismountWithTeam == true then 
+				if IsShiftKeyDown() == false then	
+					EMA:EMASendCommandToTeam( EMA.COMMAND_MOUNT_DISMOUNT )
+					EMA:UnregisterEvent("UNIT_AURA")
+				end	
 			end		
 		end			
 	end
@@ -665,7 +691,7 @@ function EMA:TeamMount(characterName, name, mountID)
 	-- already mounted.
 	if IsMounted() then 
 		return
-	end
+	end	
 	-- Checks if character is in range.
 	if EMA.db.mountInRange == true then
 		if UnitIsVisible(Ambiguate(characterName, "none") ) == false then
@@ -724,6 +750,27 @@ function EMA:AmNotMounted()
 		EMA:EMASendMessageToTeam( EMA.db.warningArea, L["I_AM_UNABLE_TO_MOUNT"], false )
 	end	
 end
+
+function EMA:RandomMountWithTeam( info, parameters )
+	local tag = parameters
+	--EMA:Print("test", tag )
+	EMA:EMASendCommandToTeam( EMA.COMMAND_MOUNT_COMMAND, tag )
+end
+
+function EMA:ReceiveRandomMountWithTeam( characterName, tag)
+	--EMA:Print("test", characterName, tag )
+	if EMAApi.IsCharacterInGroup( EMA.characterName, tag ) == true then
+		if IsMounted() == false then	
+			C_MountJournal.SummonByID(0)
+		else
+			if EMA.db.dismountWithTeam == true then
+				Dismount()
+			end	
+		end	
+	end
+end
+
+
 
 -------------------------------------------------------------------------------------------------------------
 -- Loot Functionality.
@@ -883,9 +930,27 @@ function EMA:EMAOnCommandReceived( characterName, commandName, ... )
 			if IsMounted() then
 				Dismount()
 			end	
-		end		
+		end
+	end
+	if commandName == EMA.COMMAND_MOUNT_COMMAND then
+		EMA:ReceiveRandomMountWithTeam( characterName, ... )
+	end	
+end
+
+function EMA:UPDATE_BINDINGS()
+	if InCombatLockdown() then
+		return
+	end
+	ClearOverrideBindings( EMA.keyBindingFrame )
+	local key1, key2 = GetBindingKey( "TEAMMOUNT" )		
+	if key1 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key1, "EMATeamSecureButtonMount" ) 
+	end
+	if key2 then 
+		SetOverrideBindingClick( EMA.keyBindingFrame, false, key2, "EMATeamSecureButtonMount" ) 
 	end
 end
+
 
 EMAApi.Taxi = {}
 EMAApi.Taxi.MESSAGE_TAXI_TAKEN = EMA.MESSAGE_TAXI_TAKEN

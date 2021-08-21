@@ -2,7 +2,7 @@
 --				EMA - ( Ebony's MultiBoxing Assistant )    							--
 --				Current Author: Jennifer Cally (Ebony)								--
 --																					--
---				License: All Rights Reserved 2018-2020 Jennifer Cally					--
+--				License: All Rights Reserved 2018-2021 Jennifer Calladine					--
 --																					--
 --				Some Code Used from "Jamba" that is 								--
 --				Released under the MIT License 										--
@@ -1351,7 +1351,7 @@ function EMA:EMAQuestWatcherScenarioUpdate(useCache)
 						local name = "Scenario:"..stageName.." "..currentStage.."/"..numStages
 						--EMA:Print("scenarioProgressInfo", questID, name, criteriaIndex, stageDescription , amountCompleted , totalQuantity, completed )
 						--EMA:EMASendCommandToTeam( EMA.COMMAND_QUEST_WATCH_OBJECTIVE_UPDATE, questID, name, numCriteria, stageDescription , amountCompleted , totalQuantity, completed )
-						EMA:DoQuestWatchObjectiveUpdate( EMA.CharacterName, questID, name, numCriteria, stageDescription , amountCompleted , totalQuantity, completed )
+						EMA:DoQuestWatchObjectiveUpdate( EMA.characterName, questID, name, numCriteria, stageDescription , amountCompleted , totalQuantity, completed )
 					else
 						--EMA:Print("ScenarioDONE", stageDescription)
 						local questID = 1001

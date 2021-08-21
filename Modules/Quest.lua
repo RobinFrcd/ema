@@ -2,7 +2,7 @@
 --				EMA - ( Ebony's MultiBoxing Assistant )    							--
 --				Current Author: Jennifer Cally (Ebony)								--
 --																					--
---				License: All Rights Reserved 2018-2020 Jennifer Cally					--
+--				License: All Rights Reserved 2018-2021 Jennifer Calladine					--
 --																					--
 --				Some Code Used from "Jamba" that is 								--
 --				Released under the MIT License 										--
@@ -252,6 +252,7 @@ function EMA:OnEnable()
 	EMA:RegisterEvent( "CHAT_MSG_SYSTEM", "QUEST_FAIL" )
    -- Quest post hooks.
 	EMA:SecureHook( C_GossipInfo, "SelectOption", "SelectGossipOption")
+	--EMA:SecureHook( "SelectOption", "SelectGossipOption")
 	EMA:SecureHook( C_GossipInfo, "SelectActiveQuest" )
 	EMA:SecureHook( "SelectActiveQuest" ) -- Seems bfa uses the old API?
 	EMA:SecureHook( C_GossipInfo, "SelectAvailableQuest" )
@@ -1109,15 +1110,15 @@ function EMA:ChurnNpcGossip()
 	local numberActiveQuestInfo = 5
     local index
 	--EMA:Print("test" )
-    EMA:DebugMessage( "GetNumAvailableQuests", GetNumAvailableQuests() )
-    EMA:DebugMessage( "GetNumActiveQuests", GetNumActiveQuests() )
+    EMA:DebugMessage( "GetNumAvailableQuests", C_GossipInfo.GetNumAvailableQuests() )
+    EMA:DebugMessage( "GetNumActiveQuests", C_GossipInfo.GetNumActiveQuests() )
     EMA:DebugMessage( "GetGossipAvailableQuests", C_GossipInfo.GetAvailableQuests() )
     EMA:DebugMessage( "GetGossipActiveQuests", C_GossipInfo.GetActiveQuests() )
-    for index = 0, GetNumAvailableQuests() do
-		SelectAvailableQuest( index )
+    for index = 0, C_GossipInfo.GetNumAvailableQuests() do
+		C_GossipInfo.SelectAvailableQuest( index )
 	end
-    for index = 0, GetNumActiveQuests() do
-		SelectActiveQuest( index )
+    for index = 0, C_GossipInfo.GetNumActiveQuests() do
+		C_GossipInfo.SelectActiveQuest( index )
 	end
 	EMAUtilities:ClearTable( EMA.gossipQuests )
 	local availableQuestsData = { C_GossipInfo.GetAvailableQuests() }
@@ -1155,7 +1156,7 @@ function EMA:ChurnNpcGossip()
 			-- If this quest has been completed...
 			if questInformation.isComplete then
 				-- Complete it.
-				SelectGossipActiveQuest( questInformation.index )
+				C_GossipInfo.SelectGossipActiveQuest( questInformation.index )
 			end
 		end			
 	end
@@ -1232,7 +1233,7 @@ function EMA:DoSelectGossipActiveQuest( sender, gossipIndex )
 	if EMA.db.mirrorMasterQuestSelectionAndDeclining == true then
 		EMA.isInternalCommand = true
         EMA:DebugMessage( "DoSelectGossipActiveQuest" )
-		SelectGossipActiveQuest( gossipIndex )
+		C_GossipInfo.SelectGossipActiveQuest( gossipIndex )
 		EMA.isInternalCommand = false
 	end
 end
@@ -1270,7 +1271,11 @@ function EMA:DoSelectActiveQuest( sender, questIndex )
 	if EMA.db.mirrorMasterQuestSelectionAndDeclining == true then
 		EMA.isInternalCommand = true
 		--EMA:Print( "DoSelectActiveQuest" )
-		C_GossipInfo.SelectActiveQuest( questIndex )
+		if C_GossipInfo.GetNumActiveQuests() >= 1 then	
+			C_GossipInfo.SelectActiveQuest( questIndex )
+		else
+			SelectActiveQuest( questIndex )
+		end
 		EMA.isInternalCommand = false
 	end
 end

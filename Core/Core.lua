@@ -2,7 +2,7 @@
 --				EMA - ( Ebony's MultiBoxing Assistant )    							--
 --				Current Author: Jennifer Cally (Ebony)								--
 --																					--
---				License: All Rights Reserved 2018-2020 Jennifer Cally					--
+--				License: All Rights Reserved 2018-2021 Jennifer Calladine					--
 --																					--
 --				Some Code Used from "Jamba" that is 								--
 --				Released under the MIT License 										--
@@ -395,6 +395,7 @@ end
 
 -- Send a command for the module specified (using its address) to other EMA Team characters.
 local function SendCommandToTeam( moduleAddress, commandName, ... )
+	--EMA:Print("test", moduleAddress, commandName)
 	-- Get the name of the module.
 	local moduleName = EMA.registeredModulesByAddress[moduleAddress]
 	-- Send the command identified by the module name.
